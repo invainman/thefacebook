@@ -6,6 +6,23 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+    <changeSet id="ADD_PROFILES_TABLE" author="ramil.abilov">
+        <createTable tableName="profiles">
+            <column name="id" type="bigint">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(55)">
+            </column>
+            <column name="last_name" type="varchar(55)">
+            </column>
+            <column name="age" type="int">
+            </column>
+            <column name="avatar_link" type="varchar(255)">
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="profiles" columnName="id" columnDataType="BIGINT"/>
+    </changeSet>
+
     <changeSet id="ADD_USERS_TABLE" author="ramil.abilov">
         <createTable tableName="users">
             <column name="id" type="bigint">
@@ -13,14 +30,42 @@
             </column>
             <column name="email" type="varchar(255)">
             </column>
+            <column name="profile_id" type="bigint">
+            </column>
             <column name="password" type="varchar(55)">
             </column>
         </createTable>
-
         <addAutoIncrement tableName="users" columnName="id" columnDataType="BIGINT"/>
-
+        <addForeignKeyConstraint baseTableName="users"
+                                 baseColumnNames="profile_id"
+                                 constraintName="u_p_fk1"
+                                 referencedTableName="profiles"
+                                 referencedColumnNames="id"/>
     </changeSet>
 
+
+
+    <changeSet id="ADD_PUBLICATIONS_TABLE" author="ramil.abilov">
+        <createTable tableName="publications">
+            <column name="id" type="bigint">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="date" type="TIMESTAMP">
+            </column>
+            <column name="message" type="varchar(255)">
+            </column>
+            <column name="image_link" type="varchar(255)">
+            </column>
+            <column name="author_id" type="bigint">
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="publications" columnName="id" columnDataType="BIGINT"/>
+        <addForeignKeyConstraint baseTableName="publications"
+                                 baseColumnNames="author_id"
+                                 constraintName="u_p_fk2"
+                                 referencedTableName="profiles"
+                                 referencedColumnNames="id"/>
+    </changeSet>
 
 
 </databaseChangeLog>
